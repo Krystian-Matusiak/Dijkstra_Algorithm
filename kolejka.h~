@@ -1,0 +1,191 @@
+#include "macierz_sas.h"
+
+
+template < typename T>
+void swap( T * w1 , T * w2){
+
+  T * tmp = w1;
+  w1 = w2 ;
+  w2 = tmp;
+  //delete tmp[0];
+  //delete tmp;
+}
+
+
+
+ ///  Klasa Para będzie przechowywała parę danych - klucz oraz element ( wierzchołek)
+template<typename T> 
+struct Para{
+
+  Para();
+  ~Para();
+Para( T* elem, int k): klucz(k), dana(elem), poprz(-1) {}
+  int poprz;
+  int klucz;
+  int ostatnio;
+  T * dana;
+};
+
+template<typename T> 
+Para<T>::Para(){
+  dana = new T;
+  ostatnio = -1;
+}
+
+template<typename T> 
+Para<T>::~Para(){
+  delete dana;
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+
+
+template<typename T>
+class Kolejka{
+  
+ public:
+  
+  Kolejka(){
+    kopiec = new Lista< Para<T> >;
+  }
+  ~Kolejka();
+    
+  bool czy_pusta(){ return (kopiec->dlugosc_listy() == 0);}
+  T * zwroc_usun_min();  
+  void dodaj( T * elem , int klucz ); 
+  void zmien_klucz( T * Para, int nowyKlucz);
+  void pokaz_elementy();
+  
+  Lista< Para< T >> * kopiec;
+};
+
+template <typename T>
+Kolejka<T>::~Kolejka(){
+  if( kopiec !=nullptr)
+    delete kopiec;
+}
+
+template <typename T>
+void Kolejka<T>::zmien_klucz( T * obiekt, int nowyKlucz){
+  int dlugosc = kopiec->dlugosc_listy();
+
+  Para<T> * tmp;
+  //tmp = new Para<T>;
+  int indeks;
+  
+  for( int i=1 ; i<=dlugosc ; i++)
+    if( kopiec->zwracanie_obiektu(i)->dana == obiekt ){
+      kopiec->zwracanie_obiektu(i)->klucz = nowyKlucz;
+      kopiec->zwracanie_obiektu(i)->ostatnio = obiekt->nr;
+      indeks = i;
+      i=dlugosc;
+    }
+
+
+  kopiec->iterator = kopiec->head;
+  for( int i=1 ; i<indeks ; i++)
+    kopiec->iterator = kopiec->iterator->nast;
+  
+  if(  (kopiec->head->nast != nullptr)  &&  (kopiec->head != nullptr)  )
+    
+    while(  kopiec->iterator->poprz != nullptr  ){
+      if(kopiec->iterator->obiekt->klucz <= kopiec->iterator->poprz->obiekt->klucz){
+	
+	tmp = kopiec->iterator->poprz->obiekt;
+	kopiec->iterator->poprz->obiekt = kopiec->iterator->obiekt;
+	kopiec->iterator->obiekt = tmp;	
+	
+	if( kopiec->iterator->poprz != nullptr )
+	  kopiec->iterator = kopiec->iterator->poprz;
+      }
+      else
+	goto zakoncz_petle;
+    }
+  
+ zakoncz_petle:
+  kopiec->iterator = kopiec->head;
+  //delete tmp;
+}
+
+
+template<typename T>
+T * Kolejka<T>::zwroc_usun_min(){
+  T * tmp;
+  tmp = kopiec->zwracanie_obiektu(1)->dana;
+  kopiec->head = kopiec->head->nast;
+  kopiec->iterator = kopiec->head;
+  
+  //delete kopiec->head->poprz->obiekt;
+  //kopiec->head->poprz = nullptr;
+  
+  return tmp;
+}
+
+
+template<typename T>
+void Kolejka<T>::dodaj( T * elem , int klucz){
+  
+  Para<T> * tmp;
+  Para<T> * x;
+  x = new Para<T> ( elem, klucz ) ;
+  tmp = new Para<T>;
+
+  if( !kopiec->dodaj_wezel() )
+    cout << "ERROR: Nie dodano wezla\n";
+     
+  int dlugosc = kopiec->dlugosc_listy();
+  
+  kopiec->iterator = kopiec->head;
+   for( int i=1 ; i<dlugosc ; i++)
+    kopiec->iterator = kopiec->iterator->nast;
+  
+   //kopiec->iterator->obiekt = x;
+  kopiec->tail->obiekt = x;
+  
+  /***********************************************************
+   * Pętla wykonująca sortowanie nowego elementu po kluczu,  *
+   * pod warunkiem że poprzedni element istnieje i iterator  *
+   * nie znajduje sie na początku listy. "if" przed pętlą    * 
+   * powoduje brak pętli przy ilości elementów <2            *
+   **********************************************************/
+  if(  (kopiec->head->nast != nullptr)  &&  (kopiec->head != nullptr)  )
+    
+    while(  kopiec->iterator->poprz != nullptr  ){
+      if(kopiec->iterator->obiekt->klucz <= kopiec->iterator->poprz->obiekt->klucz){
+	
+	tmp = kopiec->iterator->poprz->obiekt;
+	kopiec->iterator->poprz->obiekt = kopiec->iterator->obiekt;
+	kopiec->iterator->obiekt = tmp;
+	
+	
+	//swap( kopiec->iterator->poprz->obiekt , kopiec->iterator->obiekt );
+	
+	if( kopiec->iterator->poprz != nullptr )
+	  kopiec->iterator = kopiec->iterator->poprz;
+      }
+      else
+	goto zakoncz_petle;
+    }
+  
+ zakoncz_petle:
+  kopiec->iterator = kopiec->head;
+  //delete tmp;
+}
+
+template<typename T>
+void Kolejka<T>::pokaz_elementy(){
+  int dlugosc = kopiec->dlugosc_listy();
+
+  cout<<endl;
+  for( int i=1; i<=dlugosc ; i++ ){
+    cout << "element (" << i << ") ";
+    cout << "klucz (" << kopiec->zwracanie_obiektu(i)->klucz << ") ";
+    cout << "numer (" << kopiec->zwracanie_obiektu(i)->dana->nr << ")\n";
+  }
+  cout<<"\n\n";
+}

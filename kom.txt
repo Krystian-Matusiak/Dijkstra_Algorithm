@@ -1,0 +1,9 @@
+g++ Wezel.h
+g++ lista.h
+g++ Graf.h
+g++ lista_sas.h
+g++ macierz_sas.h
+g++ kolejka.h
+g++ Dij.h
+g++ test2.cpp
+

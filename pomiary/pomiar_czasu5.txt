@@ -1,0 +1,16 @@
+Dla 50
+Dla 25% : Pomiar listy : 0.744ms  Pomiar macierzy : 0.344ms
+
+
+Dla 50
+Dla 50% : Pomiar listy : 1.445ms  Pomiar macierzy : 0.521ms
+
+
+Dla 50
+Dla 75% : Pomiar listy : 2.318ms  Pomiar macierzy : 0.66ms
+
+
+Dla 50
+Dla 100% : Pomiar listy : 3.952ms  Pomiar macierzy : 0.807ms
+
+

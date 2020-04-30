@@ -1,0 +1,23 @@
+#include <iostream>
+#include "lista.h"
+
+/***********
+Klasa przechowująca id oraz wskaźnik na pozycje na liscie
+************/
+
+class Wierzcholek{
+
+  Wierzcholek();
+  ~Wierzcholek();
+  
+ public:
+  int nr;
+  Wezel<Wierzcholek> * wsk_pozycja;
+  Lista<Krawedz> * wskazniki_na_kraw;
+  
+};
+
+Wierzcholek::Wierzcholek(){
+  wskazniki_na_kraw = new Lista<Krawedz>;
+  wsk_pozycja = new Wezel<Wierzcholek>;
+}

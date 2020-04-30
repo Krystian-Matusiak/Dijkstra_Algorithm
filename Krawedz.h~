@@ -1,0 +1,24 @@
+#include <iostream>
+#include "Wierzcholek.h"
+
+using namespace std;
+
+/***********
+Klasa przechowująca wagę, wierzchołek początkowy,
+wierzchołek końcowy oraz wskaźnik na pozycje na liscie
+************/
+
+class Krawedz{
+
+ public:
+  int waga;
+  
+  Wierzcholek * poczatek;
+  Wierzcholek * koniec;
+
+  Wezel<Krawedz> * wsk_wierz1;
+  Wezel<Krawedz> * wsk_wierz2;
+  
+  Wezel<Krawedz> * wsk_pozycja;
+
+};
